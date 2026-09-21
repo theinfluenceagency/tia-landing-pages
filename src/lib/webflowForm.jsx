@@ -69,12 +69,16 @@ export default function WebflowFormSlot({
         if (spec.placeholder) el.setAttribute("placeholder", spec.placeholder);
         else el.removeAttribute("placeholder");
       }
+      // Webflow publishes label `for` values from the field's original auto id, so the
+      // label is found by position (it precedes its field) and repointed at the real id.
+      const prev = el.previousElementSibling;
+      const label = prev && prev.tagName === "LABEL" ? prev : wrapper.querySelector(`label[for="${CSS.escape(id)}"]`);
+      if (label) label.setAttribute("for", id);
       if (spec.hidden) {
         el.setAttribute("tabindex", "-1");
         el.setAttribute("autocomplete", "off");
         el.setAttribute("aria-hidden", "true");
         el.classList.add("wf-hp");
-        const label = wrapper.querySelector(`label[for="${CSS.escape(id)}"]`);
         if (label) label.classList.add("wf-hp");
       }
     });
