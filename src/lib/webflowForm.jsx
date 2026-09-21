@@ -15,12 +15,22 @@ import React, { useEffect, useRef, useState } from "react";
       <!-- Webflow Form Block, with the form's ID set to the page's FORM_ID -->
     </div>
 
-  `selectOptions` fills a <select> by field name, because Webflow's Data API cannot write
-  select options. `onSubmit` fires a dataLayer event before Webflow's own handler runs.
+  Webflow publishes the auto-generated `name` attributes it assigned when each field was
+  created (field, field-2, ...) even after the Designer setting is changed, but element IDs
+  publish correctly. So fields are matched by ID here and the `name` attributes are rewritten
+  at adoption to the values the site's existing forms and Lead Legend expect. Webflow serialises
+  the form at submit time, so the rewritten names are what gets submitted.
+
+  `fields` maps element id -> { name, placeholder?, hidden? }.
+  `selectOptions` fills a <select> by element id, because Webflow's Data API cannot write
+  select options. `formName` sets the form's data-name/name (what Webflow shows as the form
+  name in its Forms tab). `onSubmit` fires a dataLayer event before Webflow's own handler runs.
 */
 export default function WebflowFormSlot({
   shellId = "tia-form-shell",
+  fields = {},
   selectOptions = {},
+  formName,
   onSubmit,
   renderFallback,
   className = "",
@@ -46,8 +56,31 @@ export default function WebflowFormSlot({
 
     const form = wrapper.querySelector("form");
 
-    Object.entries(selectOptions).forEach(([name, options]) => {
-      const select = wrapper.querySelector(`select[name="${name}"]`);
+    if (form && formName) {
+      form.setAttribute("data-name", formName);
+      form.setAttribute("name", formName);
+    }
+
+    Object.entries(fields).forEach(([id, spec]) => {
+      const el = wrapper.querySelector(`#${CSS.escape(id)}`);
+      if (!el) return;
+      if (spec.name) el.setAttribute("name", spec.name);
+      if (spec.placeholder !== undefined) {
+        if (spec.placeholder) el.setAttribute("placeholder", spec.placeholder);
+        else el.removeAttribute("placeholder");
+      }
+      if (spec.hidden) {
+        el.setAttribute("tabindex", "-1");
+        el.setAttribute("autocomplete", "off");
+        el.setAttribute("aria-hidden", "true");
+        el.classList.add("wf-hp");
+        const label = wrapper.querySelector(`label[for="${CSS.escape(id)}"]`);
+        if (label) label.classList.add("wf-hp");
+      }
+    });
+
+    Object.entries(selectOptions).forEach(([id, options]) => {
+      const select = wrapper.querySelector(`#${CSS.escape(id)}`);
       if (!select) return;
       select.innerHTML = "";
       options.forEach((o) => {

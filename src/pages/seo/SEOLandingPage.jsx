@@ -304,8 +304,8 @@ const CSS = `
 }
 .tia-seo .form-card .w-button:hover { transform: translateY(-2px); box-shadow: 0 16px 25px 0 rgba(255,17,119,0.25); }
 /* honeypot: Webflow field named middle_name, hidden with its label */
-.tia-seo .form-card .w-form [name="middle_name"], .tia-seo .form-card .w-form label[for="middle_name"],
-.tia-seo .form-card .w-form label[for="middle-name"] {
+.tia-seo .form-card .w-form .wf-hp, .tia-seo .form-card .w-form [name="middle_name"],
+.tia-seo .form-card .w-form label[for="middle_name"] {
   position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;
 }
 .tia-seo .form-card .w-form-done {
@@ -855,7 +855,18 @@ export default function TIASEOLandingPage() {
             <h3>Boost my rankings</h3>
             <p className="form-intro">Tell us where you are now and we'll come back with a plan and a price.</p>
             <WebflowFormSlot
-              selectOptions={{ [FIELD_NAMES.tier]: TIER_OPTIONS }}
+              formName="SEO LP Quote Form"
+              fields={{
+                "Website-URL": { name: FIELD_NAMES.website, placeholder: "https://" },
+                Name: { name: FIELD_NAMES.name, placeholder: "" },
+                Email: { name: FIELD_NAMES.email, placeholder: "" },
+                "Business-Name": { name: FIELD_NAMES.company, placeholder: "" },
+                Phone: { name: FIELD_NAMES.phone, placeholder: "" },
+                Tier: { name: FIELD_NAMES.tier },
+                Message: { name: FIELD_NAMES.message, placeholder: "" },
+                middle_name: { name: FIELD_NAMES.company_website, placeholder: "", hidden: true },
+              }}
+              selectOptions={{ Tier: TIER_OPTIONS }}
               onSubmit={(form) => {
                 const tier = form.querySelector(`select[name="${FIELD_NAMES.tier}"]`);
                 trackConversion("seo_lp_quote_request", { form_location: "hero", tier: (tier && tier.value) || "not_specified" });

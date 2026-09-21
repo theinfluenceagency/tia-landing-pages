@@ -14,23 +14,23 @@
 <!-- Native Webflow Form Block, exactly as Webflow renders it. Parked off-screen until adopted. -->
 <div id="tia-form-shell" style="position:absolute;left:-9999px;top:0;width:1px;height:1px;overflow:hidden">
   <div class="w-form">
-    <form id="wf-form-SEO-LP-Quote-Form" name="wf-form-SEO-LP-Quote-Form" data-name="SEO LP Quote Form" method="get" redirect="/seo-lp-thank-you" data-redirect="/seo-lp-thank-you">
+    <form id="wf-form-SEO-LP-Quote-Form" name="wf-form-SEO-LP-Quote-Form" data-name="Email Form" method="get" redirect="/seo-lp-thank-you" data-redirect="/seo-lp-thank-you">
       <label for="Website-URL">Website URL</label>
-      <input class="w-input" maxlength="256" name="Website_URL" placeholder="https://" type="text" id="Website-URL" required>
+      <input class="w-input" maxlength="256" name="field" placeholder="Example Text" type="text" id="Website-URL" required>
       <label for="Name">Name</label>
-      <input class="w-input" maxlength="256" name="Name" type="text" id="Name" required>
+      <input class="w-input" maxlength="256" name="name" type="text" id="Name" required>
       <label for="Email">Work email</label>
-      <input class="w-input" maxlength="256" name="Email" type="email" id="Email" required>
+      <input class="w-input" maxlength="256" name="email" type="email" id="Email" required>
       <label for="Business-Name">Business name</label>
-      <input class="w-input" maxlength="256" name="Business-Name" type="text" id="Business-Name" required>
+      <input class="w-input" maxlength="256" name="field-2" placeholder="Example Text" type="text" id="Business-Name" required>
       <label for="Phone">Phone <span class="opt">(optional)</span></label>
-      <input class="w-input" maxlength="256" name="Phone" type="tel" id="Phone">
+      <input class="w-input" maxlength="256" name="field-3" placeholder="Example Text" type="tel" id="Phone">
       <label for="Tier">Which tier fits your goals <span class="opt">(optional)</span></label>
-      <select id="Tier" name="Tier" class="w-select"><option value="">Select</option></select>
+      <select id="Tier" name="field-4" class="w-select"><option value="">Select one...</option><option value="First">First choice</option></select>
       <label for="Message">Anything we should know? <span class="opt">(optional)</span></label>
-      <textarea id="Message" name="Message" maxlength="5000" class="w-input"></textarea>
+      <textarea id="Message" name="field-5" placeholder="Example Text" maxlength="5000" class="w-input"></textarea>
       <label for="middle_name">Leave this blank</label>
-      <input class="w-input" name="middle_name" type="text" id="middle_name" tabindex="-1" autocomplete="off">
+      <input class="w-input" name="field-6" placeholder="Example Text" type="text" id="middle_name" tabindex="-1" autocomplete="off">
       <input type="submit" class="w-button" value="Get my proposal →">
     </form>
     <div class="w-form-done"><div>Thank you! Your submission has been received!</div></div>
