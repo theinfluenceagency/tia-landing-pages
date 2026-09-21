@@ -857,14 +857,14 @@ export default function TIASEOLandingPage() {
             <WebflowFormSlot
               formName="SEO LP Quote Form"
               fields={{
-                "Website-URL": { name: FIELD_NAMES.website, placeholder: "https://" },
-                Name: { name: FIELD_NAMES.name, placeholder: "" },
-                Email: { name: FIELD_NAMES.email, placeholder: "" },
-                "Business-Name": { name: FIELD_NAMES.company, placeholder: "" },
-                Phone: { name: FIELD_NAMES.phone, placeholder: "" },
-                Tier: { name: FIELD_NAMES.tier },
-                Message: { name: FIELD_NAMES.message, placeholder: "" },
-                middle_name: { name: FIELD_NAMES.company_website, placeholder: "", hidden: true },
+                "Website-URL": { name: FIELD_NAMES.website, label: "Website URL", placeholder: "https://" },
+                Name: { name: FIELD_NAMES.name, label: "Name", placeholder: "" },
+                Email: { name: FIELD_NAMES.email, label: "Email", placeholder: "" },
+                "Business-Name": { name: FIELD_NAMES.company, label: "Business Name", placeholder: "" },
+                Phone: { name: FIELD_NAMES.phone, label: "Phone", placeholder: "" },
+                Tier: { name: FIELD_NAMES.tier, label: "Tier" },
+                Message: { name: FIELD_NAMES.message, label: "Message", placeholder: "" },
+                middle_name: { name: FIELD_NAMES.company_website, label: "middle_name", placeholder: "", hidden: true },
               }}
               selectOptions={{ Tier: TIER_OPTIONS }}
               onSubmit={(form) => {

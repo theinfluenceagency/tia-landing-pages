@@ -21,7 +21,14 @@ import React, { useEffect, useRef, useState } from "react";
   at adoption to the values the site's existing forms and Lead Legend expect. Webflow serialises
   the form at submit time, so the rewritten names are what gets submitted.
 
-  `fields` maps element id -> { name, placeholder?, hidden? }.
+  Webflow's serialiser reads each field's `data-name` (not `name`) for the key it stores in
+  the submission table and prints in notification emails, and those are published as the
+  auto-generated "Field", "Field 2", ... too. So `label` is written to `data-name` here.
+
+  Webflow publishes the API-set redirect as a bare `redirect` attribute, but its runtime
+  reads `data-redirect`. The bundle copies one to the other so the thank-you redirect fires.
+
+  `fields` maps element id -> { name, label?, placeholder?, hidden? }.
   `selectOptions` fills a <select> by element id, because Webflow's Data API cannot write
   select options. `formName` sets the form's data-name/name (what Webflow shows as the form
   name in its Forms tab). `onSubmit` fires a dataLayer event before Webflow's own handler runs.
@@ -60,11 +67,17 @@ export default function WebflowFormSlot({
       form.setAttribute("data-name", formName);
       form.setAttribute("name", formName);
     }
+    if (form && !form.getAttribute("data-redirect")) {
+      const redirect = form.getAttribute("redirect");
+      if (redirect) form.setAttribute("data-redirect", redirect);
+    }
 
     Object.entries(fields).forEach(([id, spec]) => {
       const el = wrapper.querySelector(`#${CSS.escape(id)}`);
       if (!el) return;
       if (spec.name) el.setAttribute("name", spec.name);
+      const dataName = spec.label || spec.name;
+      if (dataName) el.setAttribute("data-name", dataName);
       if (spec.placeholder !== undefined) {
         if (spec.placeholder) el.setAttribute("placeholder", spec.placeholder);
         else el.removeAttribute("placeholder");
