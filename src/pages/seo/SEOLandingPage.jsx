@@ -76,7 +76,8 @@ const THANK_YOU_URL = "/seo-lp-thank-you";
 const FORM_ID = "wf-form-SEO-LP-Quote-Form";
 // Options written into the Webflow <select name="Tier"> at mount (the Data API cannot set them).
 const TIER_OPTIONS = [
-  { value: "", label: "Not sure yet" },
+  { value: "", label: "Select one", placeholder: true },
+  { value: "not-sure", label: "Not sure yet" },
   { value: "starter", label: "Starter, $3,500/mo" },
   { value: "growth", label: "Growth, $5,500/mo" },
   { value: "enterprise", label: "Enterprise, $7,500/mo" },
@@ -195,10 +196,10 @@ const CSS = `
 }
 .tia-seo .btn-grad { background-image: ${GRAD}; color: ${WHITE}; }
 .tia-seo .btn-grad:hover { transform: translateY(-2px); box-shadow: 0 16px 25px 0 rgba(255,17,119,0.25); }
-.tia-seo .btn-outline { background: transparent; color: ${INK}; border: 1px solid ${INK}; }
-.tia-seo .btn-outline:hover { background: ${INK}; color: ${PAGE_BG}; }
-.tia-seo .btn-outline-light { background: transparent; color: ${PAGE_BG}; border: 1px solid ${PAGE_BG}; }
-.tia-seo .btn-outline-light:hover { background: ${PAGE_BG}; color: ${INK}; }
+.tia-seo .btn-ghost { background: transparent; color: ${INK}; border: 1px solid ${INK}; }
+.tia-seo .btn-ghost:hover { background: ${INK}; color: ${PAGE_BG}; }
+.tia-seo .btn-ghost-light { background: transparent; color: ${PAGE_BG}; border: 1px solid ${PAGE_BG}; }
+.tia-seo .btn-ghost-light:hover { background: ${PAGE_BG}; color: ${INK}; }
 .tia-seo .btn-white { background: ${PAGE_BG}; color: ${INK}; }
 .tia-seo .btn-white:hover { transform: translateY(-2px); box-shadow: 0 16px 16px -8px rgba(0,0,0,0.2); }
 .tia-seo .btn-full { width: 100%; }
@@ -213,20 +214,26 @@ const CSS = `
 /* ---------- NAV ---------- */
 .tia-seo .nav { background: ${PAGE_BG}; padding: 18px 0; position: sticky; top: 0; z-index: 200; }
 .tia-seo .nav-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-.tia-seo .nav-logo { height: 40px; width: auto; }
+.tia-seo .lp-nav-logo { height: 40px; width: auto; }
 
 /* ---------- HERO ---------- */
-.tia-seo .hero-wrap {
+.tia-seo .lp-hero {
+  /* Class names here must not exist in the site's global stylesheet. The old name
+     "hero-wrap" collided with a site class (display:flex, max-width:1920px, margin auto)
+     that left the gradient off-centre on wide screens. */
+  display: block;
+  width: calc(100% - 32px);
+  max-width: 1920px;
   background-image: radial-gradient(circle at 50% -20%, ${PINK}, ${PINK_WASH} 42%);
   border-radius: 64px;
-  margin: 0 16px;
+  margin: 0 auto;
   padding: 56px 32px 72px;
   position: relative;
   overflow: hidden;
 }
 .tia-seo .hero-grid {
-  display: grid; grid-template-columns: 1fr 1.1fr 0.95fr;
-  gap: 28px; align-items: center; max-width: 1440px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1.08fr 0.92fr;
+  gap: 44px; align-items: center; max-width: 1520px; margin: 0 auto; width: 100%;
 }
 .tia-seo .hero-copy { text-align: center; }
 .tia-seo .hero-copy .pill { margin-bottom: 20px; }
@@ -460,7 +467,7 @@ const CSS = `
 @media (max-width: 768px) {
   .tia-seo .lp-container { padding: 0 20px; }
   .tia-seo .lp-section { padding: 44px 0; }
-  .tia-seo .hero-wrap { border-radius: 32px; margin: 0 8px; padding: 36px 20px 44px; }
+  .tia-seo .lp-hero { border-radius: 32px; width: calc(100% - 16px); padding: 36px 20px 44px; }
   .tia-seo .hero-grid { grid-template-columns: 1fr; gap: 28px; }
   .tia-seo .collage { display: none; }
   .tia-seo .collage-mobile { display: grid; grid-template-columns: 1.25fr 0.75fr; gap: 12px; align-items: start; }
@@ -560,6 +567,9 @@ export default function TIASEOLandingPage() {
     if (!formData.email.trim()) next.email = "Enter your work email.";
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(formData.email.trim())) next.email = "That email doesn't look right.";
     if (!formData.company.trim()) next.company = "Enter your business name.";
+    if (!formData.phone.trim()) next.phone = "Enter a phone number.";
+    if (!formData.tier) next.tier = "Pick the tier closest to your goals.";
+    if (!formData.message.trim()) next.message = "Tell us a little about what you need.";
     return next;
   };
 
@@ -802,7 +812,7 @@ export default function TIASEOLandingPage() {
       {/* NAV */}
       <nav className="nav">
         <div className="lp-container nav-inner">
-          <img className="nav-logo" src={TIA_LOGO} alt="The Influence Agency" width="136" height="40" />
+          <img className="lp-nav-logo" src={TIA_LOGO} alt="The Influence Agency" width="136" height="40" />
           <a href="#quote-form" className="btn btn-grad">
             Request a quote <span className="btn-arrow">&rarr;</span>
           </a>
@@ -810,7 +820,7 @@ export default function TIASEOLandingPage() {
       </nav>
 
       {/* HERO */}
-      <section className="hero-wrap">
+      <section className="lp-hero">
         <div className="hero-grid">
           <div className="collage">
             {HERO_VISUALS.map((v, i) => (
@@ -833,7 +843,7 @@ export default function TIASEOLandingPage() {
               <a href="#quote-form" className="btn btn-grad">
                 Request a quote <span className="btn-arrow">&rarr;</span>
               </a>
-              <a href="#results" className="btn btn-outline">See our results</a>
+              <a href="#results" className="btn btn-ghost">See our results</a>
             </div>
             <p className="hero-note">Plans start at $3,500/month</p>
             <p className="hero-qualifier">
@@ -859,13 +869,13 @@ export default function TIASEOLandingPage() {
             <WebflowFormSlot
               formName="SEO LP Quote Form"
               fields={{
-                "Website-URL": { name: FIELD_NAMES.website, label: "Website URL", placeholder: "https://" },
-                Name: { name: FIELD_NAMES.name, label: "Name", placeholder: "" },
-                Email: { name: FIELD_NAMES.email, label: "Email", placeholder: "" },
-                "Business-Name": { name: FIELD_NAMES.company, label: "Business Name", placeholder: "" },
-                Phone: { name: FIELD_NAMES.phone, label: "Phone", placeholder: "" },
-                Tier: { name: FIELD_NAMES.tier, label: "Tier" },
-                Message: { name: FIELD_NAMES.message, label: "Message", placeholder: "" },
+                "Website-URL": { name: FIELD_NAMES.website, label: "Website URL", placeholder: "https://", required: true },
+                Name: { name: FIELD_NAMES.name, label: "Name", placeholder: "", required: true },
+                Email: { name: FIELD_NAMES.email, label: "Email", placeholder: "", required: true },
+                "Business-Name": { name: FIELD_NAMES.company, label: "Business Name", placeholder: "", required: true },
+                Phone: { name: FIELD_NAMES.phone, label: "Phone", labelText: "Phone", placeholder: "", required: true },
+                Tier: { name: FIELD_NAMES.tier, label: "Tier", labelText: "Which tier fits your goals?", required: true },
+                Message: { name: FIELD_NAMES.message, label: "Message", labelText: "Anything we should know?", placeholder: "", required: true },
                 middle_name: { name: FIELD_NAMES.company_website, label: "middle_name", placeholder: "", hidden: true },
               }}
               selectOptions={{ Tier: TIER_OPTIONS }}
@@ -889,21 +899,20 @@ export default function TIASEOLandingPage() {
                     {field("name", "Name", "text", { autoComplete: "name" })}
                     {field("email", "Work email", "email", { autoComplete: "email" })}
                     {field("company", "Business name", "text", { autoComplete: "organization" })}
-                    {field("phone", "Phone", "tel", { autoComplete: "tel", optional: true })}
+                    {field("phone", "Phone", "tel", { autoComplete: "tel" })}
 
                     <div className="form-field">
                       <label htmlFor="tier">
-                        Which tier fits your goals <span className="opt">(optional)</span>
+                        Which tier fits your goals?
                       </label>
-                      <select id="tier" name={FIELD_NAMES.tier} value={formData.tier} onChange={handleChange}>
-                        <option value="">Not sure yet</option>
-                        <option value="starter">Starter, $3,500/mo</option>
-                        <option value="growth">Growth, $5,500/mo</option>
-                        <option value="enterprise">Enterprise, $7,500/mo</option>
+                      <select id="tier" name={FIELD_NAMES.tier} value={formData.tier} onChange={handleChange} required>
+                        {TIER_OPTIONS.map((o) => (
+                          <option key={o.value} value={o.value} disabled={!!o.placeholder}>{o.label}</option>
+                        ))}
                       </select>
                     </div>
 
-                    {field("message", "Anything we should know?", "textarea", { optional: true })}
+                    {field("message", "Anything we should know?", "textarea")}
 
                     {/* honeypot, hidden from humans */}
                     <div className="hp-field" aria-hidden="true">

@@ -28,7 +28,8 @@ import React, { useEffect, useRef, useState } from "react";
   Webflow publishes the API-set redirect as a bare `redirect` attribute, but its runtime
   reads `data-redirect`. The bundle copies one to the other so the thank-you redirect fires.
 
-  `fields` maps element id -> { name, label?, placeholder?, hidden? }.
+  `fields` maps element id -> { name, label?, labelText?, placeholder?, required?, hidden? }.
+  `labelText` replaces the visible label copy; `required` sets or clears the attribute.
   `selectOptions` fills a <select> by element id, because Webflow's Data API cannot write
   select options. `formName` sets the form's data-name/name (what Webflow shows as the form
   name in its Forms tab). `onSubmit` fires a dataLayer event before Webflow's own handler runs.
@@ -94,6 +95,9 @@ export default function WebflowFormSlot({
       const prev = el.previousElementSibling;
       const label = prev && prev.tagName === "LABEL" ? prev : wrapper.querySelector(`label[for="${CSS.escape(id)}"]`);
       if (label) label.setAttribute("for", id);
+      if (label && spec.labelText) label.textContent = spec.labelText;
+      if (spec.required === true) el.setAttribute("required", "");
+      if (spec.required === false) el.removeAttribute("required");
       if (spec.hidden) {
         el.setAttribute("tabindex", "-1");
         el.setAttribute("autocomplete", "off");
@@ -111,6 +115,10 @@ export default function WebflowFormSlot({
         const opt = document.createElement("option");
         opt.value = o.value;
         opt.textContent = o.label;
+        if (o.placeholder) {
+          opt.disabled = true;
+          opt.selected = true;
+        }
         select.appendChild(opt);
       });
     });
