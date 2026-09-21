@@ -1,0 +1,25 @@
+{
+  "name": "tia-landing-pages",
+  "version": "0.1.0",
+  "description": "TIA paid landing pages: React builds mounted into thin Webflow shell pages, with native Webflow forms adopted at runtime.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "lucide-react": "^1.47.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.7.0",
+    "playwright": "^1.63.0",
+    "vite": "^5.4.21"
+  },
+  "private": true,
+  "type": "module"
+}
