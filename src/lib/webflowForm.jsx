@@ -67,9 +67,16 @@ export default function WebflowFormSlot({
       form.setAttribute("data-name", formName);
       form.setAttribute("name", formName);
     }
-    if (form && !form.getAttribute("data-redirect")) {
-      const redirect = form.getAttribute("redirect");
-      if (redirect) form.setAttribute("data-redirect", redirect);
+    if (form) {
+      const redirect = form.getAttribute("data-redirect") || form.getAttribute("redirect");
+      if (redirect) {
+        form.setAttribute("data-redirect", redirect);
+        // Webflow's forms module copies data-redirect into its per-form jQuery data once,
+        // at init. If it initialised before adoption, the attribute alone is not read again.
+        const $ = window.jQuery;
+        const wfData = $ && typeof $.data === "function" ? $.data(form, ".w-form") : null;
+        if (wfData) wfData.redirect = redirect;
+      }
     }
 
     Object.entries(fields).forEach(([id, spec]) => {
