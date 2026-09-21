@@ -212,6 +212,7 @@ const CSS = `
 }
 
 /* ---------- NAV ---------- */
+.tia-seo section[id], .tia-seo .form-card[id] { scroll-margin-top: 90px; }
 .tia-seo .nav { background: ${PAGE_BG}; padding: 18px 0; position: sticky; top: 0; z-index: 200; }
 .tia-seo .nav-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 .tia-seo .lp-nav-logo { height: 40px; width: auto; }
@@ -967,7 +968,7 @@ export default function TIASEOLandingPage() {
       </section>
 
       {/* PRICING */}
-      <section className="lp-section">
+      <section className="lp-section" id="pricing">
         <div className="lp-container">
           <h2 className="h-lg center">
             Pricing that's <span className="hl">transparent</span> from the first call.
@@ -1097,7 +1098,7 @@ export default function TIASEOLandingPage() {
       </section>
 
       {/* HOW IT WORKS */}
-      <section className="lp-section">
+      <section className="lp-section" id="process">
         <div className="lp-container">
           <h2 className="h-lg center">From audit to authority, our six-step process.</h2>
           <div className="steps-grid">
@@ -1113,7 +1114,7 @@ export default function TIASEOLandingPage() {
       </section>
 
       {/* TEAM */}
-      <section className="lp-section">
+      <section className="lp-section" id="team">
         <div className="lp-container">
           <h2 className="h-lg center">You get a team, not a ticket queue.</h2>
           <div className="team-card">
@@ -1148,7 +1149,7 @@ export default function TIASEOLandingPage() {
       </section>
 
       {/* FAQ */}
-      <section className="lp-section">
+      <section className="lp-section" id="faq">
         <div className="lp-container">
           <h2 className="h-lg center">Common questions.</h2>
           <div className="faq-list">
