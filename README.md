@@ -10,7 +10,7 @@ submissions, email notifications, the thank-you redirect and Lead Legend keep wo
    - an HTML Embed: `<div id="tia-lp-root" data-lp="seo"></div>`
    - a native Webflow Form Block wrapped in `<div id="tia-form-shell">`, parked off-screen by page CSS
    - footer code that loads the bundle:
-     `<script type="module" src="https://cdn.jsdelivr.net/gh/<owner>/tia-landing-pages@<tag>/dist/seo-lp.js"></script>`
+     `<script type="module" src="https://cdn.jsdelivr.net/gh/theinfluenceagency/tia-landing-pages@<tag>/dist/seo-lp.js"></script>`
 2. **React bundle** (`dist/seo-lp.js`, built here). On mount it renders the whole page, then moves the
    Webflow form into the hero card (`src/lib/webflowForm.jsx`). DOM listeners survive the move, so
    Webflow's own submit handler still runs. It also writes the tier options into the `Tier` select,
@@ -31,7 +31,7 @@ git tag v0.1.1 && git push && git push --tags
 ```
 
 jsDelivr serves a new tag within a few minutes at
-`https://cdn.jsdelivr.net/gh/<owner>/tia-landing-pages@v0.1.1/dist/seo-lp.js`.
+`https://cdn.jsdelivr.net/gh/theinfluenceagency/tia-landing-pages@v0.1.1/dist/seo-lp.js`.
 Update the tag in the Webflow page's footer code and publish the Webflow page.
 
 Pin to a tag, never to `main`, so a half-finished commit can never reach a live ad destination.
