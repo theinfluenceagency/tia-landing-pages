@@ -82,15 +82,17 @@ const TIER_OPTIONS = [
   { value: "enterprise", label: "Enterprise, $7,500/mo" },
 ];
 
-// Field `name` attributes match the live site's existing contact form exactly, so Lead
-// Legend's field mapping and the Webflow submission table stay consistent across forms.
-// Their honeypot is called middle_name, so this uses the same name.
+// Field `name` attributes match what the site-wide Lead Legend snippet looks for
+// (Full-Name, Email, Phone-Number, Business-name), so leads arrive there with the contact
+// name, email, phone and company mapped instead of "Missing Input". The Webflow submission
+// table uses the `label` written to data-name, not these. The site's honeypot is called
+// middle_name, so this uses the same name.
 const FIELD_NAMES = {
   website: "Website_URL",
-  name: "Name",
+  name: "Full-Name",
   email: "Email",
-  phone: "Phone",
-  company: "Business-Name",
+  phone: "Phone-Number",
+  company: "Business-name",
   tier: "Tier",
   message: "Message",
   company_website: "middle_name",
@@ -543,7 +545,7 @@ export default function TIASEOLandingPage() {
   }, []);
 
   // Keys off `id`, not `name`. The name attributes carry the live site's Webflow field
-  // names (Website_URL, Business-Name, middle_name) for Lead Legend compatibility, while
+  // names (Full-Name, Business-name, middle_name) for Lead Legend compatibility, while
   // the ids stay as the readable state keys.
   const handleChange = (e) => {
     const key = e.target.id;
