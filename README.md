@@ -25,7 +25,7 @@ All copy lives in `src/pages/<lp>/<Page>.jsx`, in plain arrays near the top of t
 
 ```bash
 npm install
-npm run build                       # writes dist/seo-lp.js and dist/assets/
+npm run build                       # writes dist/<page>-lp.js and dist/assets/
 git add -A && git commit -m "..."
 git tag v0.1.1 && git push && git push --tags
 ```
@@ -37,6 +37,20 @@ Update the tag in the Webflow page's footer code and publish the Webflow page.
 Pin to a tag, never to `main`, so a half-finished commit can never reach a live ad destination.
 Set `VITE_ASSET_BASE` in `.env.production` to the release URL so the team photo and any other
 repo-hosted assets resolve.
+
+## Pages
+
+| Entry | Component | Webflow page | Form name | Thank-you |
+|---|---|---|---|---|
+| `dist/seo-lp.js` | `src/pages/seo/SEOLandingPage.jsx` | `/seo-lp` | SEO LP Quote Form | `/seo-lp-thank-you` |
+| `dist/aeo-lp.js` | `src/pages/aeo/AEOLandingPage.jsx` | `/aeo` | AEO LP Quote Form | `/aeo-thank-you` |
+
+Each entry is built on its own (`npm run build` runs `LP=<name> vite build` per page) so every bundle is
+self-contained: no shared chunk, so the two pages can be pinned to different tags.
+
+The AEO page was ported from a static design export: everything below the hero is the export's HTML
+(class names prefixed `aeo-`, assets in `public/assets/aeo/`) rendered with `dangerouslySetInnerHTML`,
+and the header, hero and form are JSX. Its icons use the Font Awesome kit the Webflow site already loads.
 
 ## Adding a landing page
 

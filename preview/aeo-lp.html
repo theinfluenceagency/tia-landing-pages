@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>AEO LP preview shell (mimics the Webflow page)</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>body{margin:0;background:#F4F4F7}</style>
+</head>
+<body>
+<div id="tia-lp-root" data-lp="aeo"></div>
+<div id="tia-form-shell" style="position:absolute;left:-9999px;top:0;width:1px;height:1px;overflow:hidden">
+  <div class="w-form">
+    <form id="wf-form-AEO-LP-Quote-Form" name="wf-form-AEO-LP-Quote-Form" data-name="AEO LP Quote Form" method="get" redirect="/aeo-thank-you" data-redirect="/aeo-thank-you">
+      <label for="Website-URL">Website URL</label>
+      <input class="w-input" maxlength="256" name="field" placeholder="Example Text" type="text" id="Website-URL">
+      <label for="Name">Name</label>
+      <input class="w-input" maxlength="256" name="name" type="text" id="Name" required>
+      <label for="Email">Work email</label>
+      <input class="w-input" maxlength="256" name="email" type="email" id="Email" required>
+      <label for="Phone">Phone</label>
+      <input class="w-input" maxlength="256" name="field-3" placeholder="Example Text" type="tel" id="Phone">
+      <label for="Business-Name">Business name</label>
+      <input class="w-input" maxlength="256" name="field-2" placeholder="Example Text" type="text" id="Business-Name" required>
+      <label for="Tier">Tier</label>
+      <select id="Tier" name="field-4" class="w-select"><option value="">Select one...</option></select>
+      <label for="Message">Message</label>
+      <textarea id="Message" name="field-5" placeholder="Example Text" maxlength="5000" class="w-input"></textarea>
+      <label for="field-6">Leave this blank</label>
+      <input class="w-input" name="field-6" placeholder="Example Text" type="text" id="middle_name" tabindex="-1" autocomplete="off">
+      <input type="submit" class="w-button" value="Let's talk →">
+    </form>
+    <div class="w-form-done"><div>Thank you! Your submission has been received!</div></div>
+    <div class="w-form-fail"><div>Oops! Something went wrong while submitting the form.</div></div>
+  </div>
+</div>
+<script type="module" src="/aeo-lp.js"></script>
+</body>
+</html>

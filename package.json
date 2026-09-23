@@ -4,8 +4,10 @@
   "description": "TIA paid landing pages: React builds mounted into thin Webflow shell pages, with native Webflow forms adopted at runtime.",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "build": "rm -rf dist && LP=seo-lp vite build && LP=aeo-lp vite build",
+    "preview": "vite preview",
+    "build:seo": "LP=seo-lp vite build",
+    "build:aeo": "LP=aeo-lp vite build"
   },
   "keywords": [],
   "author": "",
