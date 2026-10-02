@@ -832,12 +832,12 @@ export default function TIASEOLandingPage() {
           </div>
 
           <div className="hero-copy">
-            <span className="pill">Full-service SEO. Technical, content, local and AEO.</span>
+            <span className="pill">Full-service SEO company. Technical, content, local and AEO.</span>
             <h1>
-              Organic search that becomes your <span className="hl">best lead source</span>
+              The SEO agency that turns organic search into your <span className="hl">best lead source</span>
             </h1>
             <p className="hero-sub">
-              Long-term visibility without the perpetual ad spend. Technical audits, content strategy, local SEO, and
+              Long-term visibility without the perpetual ad spend. Technical audits, content strategy, local SEO services, and
               answer engine optimization so you get picked by AI search too. One team, reported on every quarter.
             </p>
             <div className="hero-ctas">
@@ -971,7 +971,7 @@ export default function TIASEOLandingPage() {
       <section className="lp-section" id="pricing">
         <div className="lp-container">
           <h2 className="h-lg center">
-            Pricing that's <span className="hl">transparent</span> from the first call.
+            SEO services pricing that's <span className="hl">transparent</span> from the first call.
           </h2>
           <div className="pricing-grid">
             {tiers.map((t) => (
@@ -1007,7 +1007,7 @@ export default function TIASEOLandingPage() {
       {/* PILLARS, PINK BLOCK */}
       <section className="block-pink">
         <div className="lp-container">
-          <h2 className="h-lg on-color center">Technical, content, local, and AEO, all under one roof.</h2>
+          <h2 className="h-lg on-color center">One SEO company for technical, content, local, and AEO.</h2>
           <div className="pillars-grid">
             {pillars.map((p) => (
               <div key={p.title} className="pillar-card">
