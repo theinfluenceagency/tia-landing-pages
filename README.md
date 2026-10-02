@@ -25,7 +25,8 @@ All copy lives in `src/pages/<lp>/<Page>.jsx`, in plain arrays near the top of t
 
 ```bash
 npm install
-npm run build                       # writes dist/<page>-lp.js and dist/assets/
+npm run build                       # writes dist/<page>-lp.js, dist/<page>-lp.css,
+                                    # dist/<page>-lp.prerender.html and dist/assets/
 git add -A && git commit -m "..."
 git tag v0.1.1 && git push && git push --tags
 ```
@@ -35,6 +36,23 @@ jsDelivr serves a new tag within a few minutes at
 Update the tag in the Webflow page's footer code and publish the Webflow page.
 
 Pin to a tag, never to `main`, so a half-finished commit can never reach a live ad destination.
+
+### Pre-rendered markup (v0.3.0+)
+
+`scripts/prerender.mjs` renders each page to static HTML so the Webflow shell carries the full
+copy before JavaScript runs (Google Ads rated landing page experience BELOW_AVERAGE while the
+shell was an empty div). Three things live in Webflow per page and must be refreshed on every
+release that changes copy or styles:
+
+1. `#tia-lp-root` carries the page's scope class (`tia-seo` / `tia-aeo`) and contains one HTML
+   Embed whose code is `dist/<page>-lp.prerender.html` (under Webflow's 50,000-character embed cap;
+   the script splits into several embeds if a page outgrows it).
+2. The page head links `dist/<page>-lp.css` from the release tag and neutralises the embed wrapper:
+   `#tia-lp-root > .w-embed { display: contents }`.
+3. The footer script tag points at the same release tag.
+
+The bundle's `createRoot(...).render()` replaces the pre-rendered children with the identical
+React tree, so there is no visible change when it mounts.
 Set `VITE_ASSET_BASE` in `.env.production` to the release URL so the team photo and any other
 repo-hosted assets resolve.
 
