@@ -206,6 +206,9 @@
 .tia-aeo .aeo-intro h2{font-size:36px;margin-bottom:22px;}
 .tia-aeo .aeo-intro p{font-size:18px;color:var(--text-body);line-height:1.6;margin-bottom:16px;}
 .tia-aeo .aeo-benefits-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+.tia-aeo #measurement .aeo-benefits-grid{grid-template-columns:repeat(4,1fr);}
+@media (max-width:1080px){.tia-aeo #measurement .aeo-benefits-grid{grid-template-columns:repeat(2,1fr);}}
+@media (max-width:640px){.tia-aeo #measurement .aeo-benefits-grid{grid-template-columns:1fr;}}
 .tia-aeo .aeo-bcard{background:#fff;border-radius:22px;padding:34px 30px;box-shadow:var(--shadow-sm);border:1px solid var(--border-default);
     transition:transform var(--dur-base) var(--ease-standard),box-shadow var(--dur-base) var(--ease-standard);}
 .tia-aeo .aeo-bcard:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);}
