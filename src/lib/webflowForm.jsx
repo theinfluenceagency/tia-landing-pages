@@ -119,6 +119,7 @@ export default function WebflowFormSlot({
           opt.disabled = true;
           opt.selected = true;
         }
+        if (o.selected) opt.selected = true;
         select.appendChild(opt);
       });
     });

@@ -56,6 +56,16 @@ React tree, so there is no visible change when it mounts.
 Set `VITE_ASSET_BASE` in `.env.production` to the release URL so the team photo and any other
 repo-hosted assets resolve.
 
+### Offer, pricing dose and form (v0.4.0+)
+
+Both pages lead with "Get my free SEO/AEO opportunities proposal" rather than "Request a quote".
+The SEO page shows its price once in the hero ("Retainers from $3,500/month", matching the ad
+headline) and the three-tier section sits after the FAQ, retitled to what each retainer includes.
+The budget select on both forms is optional and defaults to "Not sure yet, show me what it would
+take"; the message field is optional. No phone number and no instant booking by design: leads are
+still qualified by a human before any call. Rationale and the competitor audit behind it live in
+the project doc `claude/COMPETITOR_LP_RESEARCH.md`.
+
 ## Pages
 
 | Entry | Component | Webflow page | Form name | Thank-you |

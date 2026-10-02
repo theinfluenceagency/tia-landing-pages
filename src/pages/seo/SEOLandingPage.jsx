@@ -75,12 +75,15 @@ const THANK_YOU_URL = "/seo-lp-thank-you";
 // snippet MUST be updated to include this ID or submissions will not be tracked.
 const FORM_ID = "wf-form-SEO-LP-Quote-Form";
 // Options written into the Webflow <select name="Tier"> at mount (the Data API cannot set them).
-const TIER_OPTIONS = [
-  { value: "", label: "Select one", placeholder: true },
-  { value: "not-sure", label: "Not sure yet" },
-  { value: "starter", label: "Starter, $3,500/mo" },
-  { value: "growth", label: "Growth, $5,500/mo" },
-  { value: "enterprise", label: "Enterprise, $7,500/mo" },
+// The field is optional and defaults to "Not sure yet": the budget is a triage signal for sales,
+// not a gate. Asking a stranger to pick a $3,500 / $5,500 / $7,500 tier before a conversation was
+// the single biggest piece of friction on the page (see claude/COMPETITOR_LP_RESEARCH.md).
+const BUDGET_OPTIONS = [
+  { value: "not-sure", label: "Not sure yet, show me what it would take", selected: true },
+  { value: "under-3500", label: "Under $3,500/mo" },
+  { value: "3500-5500", label: "$3,500 to $5,500/mo" },
+  { value: "5500-7500", label: "$5,500 to $7,500/mo" },
+  { value: "7500-plus", label: "$7,500+/mo" },
 ];
 
 // Field `name` attributes match what the site-wide Lead Legend snippet looks for
@@ -536,7 +539,7 @@ export default function TIASEOLandingPage() {
     email: "",
     phone: "",
     company: "",
-    tier: "",
+    tier: "not-sure",
     message: "",
     company_website: "", // honeypot, must stay empty
   });
@@ -569,8 +572,6 @@ export default function TIASEOLandingPage() {
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(formData.email.trim())) next.email = "That email doesn't look right.";
     if (!formData.company.trim()) next.company = "Enter your business name.";
     if (!formData.phone.trim()) next.phone = "Enter a phone number.";
-    if (!formData.tier) next.tier = "Pick the tier closest to your goals.";
-    if (!formData.message.trim()) next.message = "Tell us a little about what you need.";
     return next;
   };
 
@@ -585,7 +586,7 @@ export default function TIASEOLandingPage() {
       return;
     }
 
-    trackConversion("seo_lp_quote_request", { form_location: "hero", tier: formData.tier || "not_specified" });
+    trackConversion("seo_lp_quote_request", { form_location: "hero", budget: formData.tier || "not_specified" });
 
     // Redirect to the thank-you page so the existing WEBPAGE-type Google Ads conversion
     // actions fire. Falls back to the inline success state if no URL is configured.
@@ -815,7 +816,7 @@ export default function TIASEOLandingPage() {
         <div className="lp-container nav-inner">
           <img className="lp-nav-logo" src={TIA_LOGO} alt="The Influence Agency" width="136" height="40" />
           <a href="#quote-form" className="btn btn-grad">
-            Request a quote <span className="btn-arrow">&rarr;</span>
+            Get my free proposal <span className="btn-arrow">&rarr;</span>
           </a>
         </div>
       </nav>
@@ -842,14 +843,11 @@ export default function TIASEOLandingPage() {
             </p>
             <div className="hero-ctas">
               <a href="#quote-form" className="btn btn-grad">
-                Request a quote <span className="btn-arrow">&rarr;</span>
+                Get my free SEO opportunities proposal <span className="btn-arrow">&rarr;</span>
               </a>
               <a href="#results" className="btn btn-ghost">See our results</a>
             </div>
-            <p className="hero-note">Plans start at $3,500/month</p>
-            <p className="hero-qualifier">
-              Built for businesses ready to invest in organic growth. Not a fit for one-off audits or link building on its own.
-            </p>
+            <p className="hero-note">Retainers from $3,500/month.</p>
 
             {/* mobile keeps two of the four reporting shots so the proof survives the breakpoint */}
             <div className="collage-mobile" style={{ marginTop: 28 }}>
@@ -865,8 +863,11 @@ export default function TIASEOLandingPage() {
             {/* The live form is a native Webflow Form Block, adopted into this card at mount so
                 submissions, notifications, the thank-you redirect and Lead Legend keep working.
                 The markup below only renders in local preview, when no Webflow form is present. */}
-            <h3>Boost my rankings</h3>
-            <p className="form-intro">Tell us where you are now and we'll come back with a plan and a price.</p>
+            <h3>Get your free SEO opportunities proposal</h3>
+            <p className="form-intro">
+              Tell us about your business and your site. We'll review where you stand against your competitors, get on a
+              short call, and send a proposal with the opportunities we see and what it would take to win them.
+            </p>
             <WebflowFormSlot
               formName="SEO LP Quote Form"
               fields={{
@@ -875,14 +876,14 @@ export default function TIASEOLandingPage() {
                 Email: { name: FIELD_NAMES.email, label: "Email", placeholder: "", required: true },
                 "Business-Name": { name: FIELD_NAMES.company, label: "Business Name", placeholder: "", required: true },
                 Phone: { name: FIELD_NAMES.phone, label: "Phone", labelText: "Phone", placeholder: "", required: true },
-                Tier: { name: FIELD_NAMES.tier, label: "Tier", labelText: "Which tier fits your goals?", required: true },
-                Message: { name: FIELD_NAMES.message, label: "Message", labelText: "Anything we should know?", placeholder: "", required: true },
+                Tier: { name: FIELD_NAMES.tier, label: "Monthly budget", labelText: "Monthly budget (optional)", required: false },
+                Message: { name: FIELD_NAMES.message, label: "Message", labelText: "Anything we should know? (optional)", placeholder: "", required: false },
                 middle_name: { name: FIELD_NAMES.company_website, label: "middle_name", placeholder: "", hidden: true },
               }}
-              selectOptions={{ Tier: TIER_OPTIONS }}
+              selectOptions={{ Tier: BUDGET_OPTIONS }}
               onSubmit={(form) => {
-                const tier = form.querySelector(`select[name="${FIELD_NAMES.tier}"]`);
-                trackConversion("seo_lp_quote_request", { form_location: "hero", tier: (tier && tier.value) || "not_specified" });
+                const budget = form.querySelector(`select[name="${FIELD_NAMES.tier}"]`);
+                trackConversion("seo_lp_quote_request", { form_location: "hero", budget: (budget && budget.value) || "not_specified" });
               }}
               renderFallback={() => (
                 <>
@@ -904,16 +905,16 @@ export default function TIASEOLandingPage() {
 
                     <div className="form-field">
                       <label htmlFor="tier">
-                        Which tier fits your goals?
+                        Monthly budget <span className="opt">(optional)</span>
                       </label>
-                      <select id="tier" name={FIELD_NAMES.tier} value={formData.tier} onChange={handleChange} required>
-                        {TIER_OPTIONS.map((o) => (
-                          <option key={o.value} value={o.value} disabled={!!o.placeholder}>{o.label}</option>
+                      <select id="tier" name={FIELD_NAMES.tier} value={formData.tier} onChange={handleChange}>
+                        {BUDGET_OPTIONS.map((o) => (
+                          <option key={o.value} value={o.value}>{o.label}</option>
                         ))}
                       </select>
                     </div>
 
-                    {field("message", "Anything we should know?", "textarea")}
+                    {field("message", "Anything we should know?", "textarea", { optional: true })}
 
                     {/* honeypot, hidden from humans */}
                     <div className="hp-field" aria-hidden="true">
@@ -930,14 +931,14 @@ export default function TIASEOLandingPage() {
                     </div>
 
                     <button type="submit" className="btn btn-grad btn-full">
-                      Get my proposal <span className="btn-arrow">&rarr;</span>
+                      Get my free proposal <span className="btn-arrow">&rarr;</span>
                     </button>
                   </form>
                 )}
                 </>
               )}
             />
-            <p className="form-note">No commitment required. We typically respond within 1 business day.</p>
+            <p className="form-note">No commitment. We typically respond within 1 business day.</p>
           </div>
         </div>
       </section>
@@ -964,43 +965,6 @@ export default function TIASEOLandingPage() {
               <div className="ach-label">{a.label}</div>
             </div>
           ))}
-        </div>
-      </section>
-
-      {/* PRICING */}
-      <section className="lp-section" id="pricing">
-        <div className="lp-container">
-          <h2 className="h-lg center">
-            SEO services pricing that's <span className="hl">transparent</span> from the first call.
-          </h2>
-          <div className="pricing-grid">
-            {tiers.map((t) => (
-              <div key={t.name} className={`price-card${t.featured ? " featured" : ""}`}>
-                {t.featured && <span className="price-tag">Most popular</span>}
-                <div className="price-name">{t.name}</div>
-                <div className="price-for">{t.forWho}</div>
-                <div className="price-amount">
-                  {t.price}
-                  <span> /month</span>
-                </div>
-                <div className="price-min">Billed monthly</div>
-                <ul className="price-features">
-                  {t.features.map((f) => (
-                    <li key={f}>
-                      <Check size={17} strokeWidth={2.5} />
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-                <a href="#quote-form" className={`btn ${t.featured ? "btn-white" : "btn-grad"} btn-full`}>
-                  Request a quote <span className="btn-arrow">&rarr;</span>
-                </a>
-              </div>
-            ))}
-          </div>
-          <p className="price-foot">
-            Not sure which tier fits? Tell us your situation and we'll recommend one, including if that's the cheapest.
-          </p>
         </div>
       </section>
 
@@ -1163,6 +1127,43 @@ export default function TIASEOLandingPage() {
         </div>
       </section>
 
+      {/* PRICING */}
+      <section className="lp-section" id="pricing">
+        <div className="lp-container">
+          <h2 className="h-lg center">
+            What each SEO retainer <span className="hl">includes</span>.
+          </h2>
+          <div className="pricing-grid">
+            {tiers.map((t) => (
+              <div key={t.name} className={`price-card${t.featured ? " featured" : ""}`}>
+                {t.featured && <span className="price-tag">Most popular</span>}
+                <div className="price-name">{t.name}</div>
+                <div className="price-for">{t.forWho}</div>
+                <div className="price-amount">
+                  {t.price}
+                  <span> /month</span>
+                </div>
+                <div className="price-min">Billed monthly</div>
+                <ul className="price-features">
+                  {t.features.map((f) => (
+                    <li key={f}>
+                      <Check size={17} strokeWidth={2.5} />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+                <a href="#quote-form" className={`btn ${t.featured ? "btn-white" : "btn-grad"} btn-full`}>
+                  Get my free proposal <span className="btn-arrow">&rarr;</span>
+                </a>
+              </div>
+            ))}
+          </div>
+          <p className="price-foot">
+            Not sure which fits? Your free proposal will recommend one, including if that's the cheapest.
+          </p>
+        </div>
+      </section>
+
       {/* BOTTOM CTA */}
       <section className="block-pink">
         <div className="lp-container cta-inner">
@@ -1171,9 +1172,8 @@ export default function TIASEOLandingPage() {
           </h2>
           <p className="on-color-muted">Talk to a strategist. No commitment required.</p>
           <a href="#quote-form" className="btn btn-white">
-            Boost my rankings <span className="btn-arrow">&rarr;</span>
+            Get my free proposal <span className="btn-arrow">&rarr;</span>
           </a>
-          <p className="cta-note on-color-muted">Plans from $3,500/month.</p>
         </div>
       </section>
 
@@ -1196,7 +1196,7 @@ export default function TIASEOLandingPage() {
       {/* STICKY MOBILE CTA */}
       <div className={`sticky-cta${showSticky && !submitted ? " show" : ""}`}>
         <a href="#quote-form" className="btn btn-grad">
-          Request a quote <span className="btn-arrow">&rarr;</span>
+          Get my free proposal <span className="btn-arrow">&rarr;</span>
         </a>
       </div>
     </div>
