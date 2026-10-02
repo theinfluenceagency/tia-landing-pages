@@ -39,6 +39,10 @@ for (const lp of targets) {
   const Page = mod.default;
   let html = renderToStaticMarkup(React.createElement(Page));
 
+  // Decorative inline SVG icons (Lucide, all aria-hidden) are dropped from the pre-render: they
+  // are ~40% of the markup, carry no text, and React draws them the moment it mounts.
+  html = html.replace(/<svg\b[\s\S]*?<\/svg>/g, "");
+
   // Lift the component's <style> block(s) out into a stylesheet.
   const styles = [];
   html = html.replace(/<style>([\s\S]*?)<\/style>/g, (_, css) => {

@@ -82,7 +82,7 @@ export default function AEOLandingPage() {
 
           <div className="aeo-hero-center">
             <span className="aeo-eyebrow">Answer engine optimization</span>
-            <h1 className="aeo-display">Get found by AI search -<br />before your competitors do</h1>
+            <h1 className="aeo-display">AI search optimization that gets you found<br />before your competitors do</h1>
             <p className="aeo-sub">We make your brand <strong>the answer</strong> across AI Overviews, ChatGPT, Perplexity, voice search, and zero-click results. AEO strategy, technical SEO, and answer-ready content - under one roof.</p>
             <div className="aeo-hero-cta">
               <a className="aeo-btn aeo-btn-grad aeo-btn-lg" href="#hero-form">Request a quote</a>
