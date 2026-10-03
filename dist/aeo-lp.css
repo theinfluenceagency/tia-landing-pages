@@ -381,3 +381,33 @@
   .tia-aeo .aeo-case-stats{gap:24px;}
   .tia-aeo .aeo-case-num{font-size:38px;}
 }
+
+/* ---------- MOBILE FIXES 2026-10-03 ---------- */
+@media (max-width:1080px){
+  /* copy first, imagery second, form third on narrow screens */
+  .tia-aeo .aeo-hero-center{order:-1;}
+}
+@media (max-width:640px){
+  .tia-aeo .aeo-hero-grid{padding:28px 0 56px;gap:28px;}
+  /* collage becomes a flat stack: Gemini answer full width, Business Profile card beneath */
+  .tia-aeo .aeo-collage{height:auto;max-width:none;margin-top:0;display:grid;grid-template-columns:1fr;gap:14px;justify-items:center;}
+  .tia-aeo .aeo-collage .aeo-tile{position:static;transform:none;aspect-ratio:auto;}
+  .tia-aeo .aeo-collage .aeo-t-video{display:none;}
+  .tia-aeo .aeo-collage .aeo-t-gemini{width:100%;aspect-ratio:1964/986;}
+  .tia-aeo .aeo-collage .aeo-t-gbp{width:62%;aspect-ratio:475/482;}
+  .tia-aeo .aeo-collage .aeo-tile img{width:100%;height:auto;object-fit:contain;}
+  .tia-aeo .aeo-hero-center .aeo-eyebrow{margin-bottom:18px;}
+  .tia-aeo .aeo-hero-cta{margin-top:26px;}
+  .tia-aeo .aeo-btn-lg{padding:16px 24px;font-size:16px;width:100%;justify-content:center;text-align:center;}
+  .tia-aeo .aeo-formcard{padding:26px 20px;}
+  /* stat cards two-up so the proof strip is not four screens tall on a phone */
+  .tia-aeo .aeo-statpanel{grid-template-columns:1fr 1fr;gap:12px;}
+  .tia-aeo .aeo-statcard{padding:22px 16px;}
+  .tia-aeo .aeo-num{font-size:26px;}
+  .tia-aeo .aeo-formcard h3{font-size:22px;}
+  /* comparison table: fixed layout so the three columns share the width instead of overflowing */
+  .tia-aeo .aeo-cmp-table table{table-layout:fixed;}
+  .tia-aeo .aeo-cmp-table th, .tia-aeo .aeo-cmp-table td{padding:12px 10px;font-size:13px;overflow-wrap:anywhere;}
+  .tia-aeo .aeo-cmp-table tbody th{width:28%;}
+  .tia-aeo .aeo-cmp-table thead th{font-size:14px;}
+}

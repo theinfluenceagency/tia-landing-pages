@@ -141,8 +141,8 @@ const ACCREDITATIONS = [
 // `ar` is each asset's true aspect ratio so nothing gets cropped or upscaled.
 const HERO_VISUALS = [
   { alt: "Organic website traffic growth", file: "64d2a46acc3d8580f096ff91_image%203.avif", ar: "979 / 601", mobile: true },
-  { alt: "Google Search Console performance", file: "64d28e23d05cbc50ec2849be_Google%20Search%20Console.avif", ar: "1000 / 480", mobile: false },
-  { alt: "Featured keyword rankings", file: "64e4f4cf9f6bdfb58413e4db_Keyword%20Ranking.avif", ar: "413 / 789", mobile: true },
+  { alt: "Google Search Console performance", file: "64d28e23d05cbc50ec2849be_Google%20Search%20Console.avif", ar: "1000 / 480", mobile: true },
+  { alt: "Featured keyword rankings", file: "64e4f4cf9f6bdfb58413e4db_Keyword%20Ranking.avif", ar: "413 / 789", mobile: false },
   { alt: "Google Trends demand data", file: "64d28ece51352c47eaf0b82c_GoogleTrends1.avif", ar: "935 / 755", mobile: false },
 ];
 
@@ -472,13 +472,21 @@ const CSS = `
   .tia-seo .lp-container { padding: 0 20px; }
   .tia-seo .lp-section { padding: 44px 0; }
   .tia-seo .lp-hero { border-radius: 32px; width: calc(100% - 16px); padding: 36px 20px 44px; }
-  .tia-seo .hero-grid { grid-template-columns: 1fr; gap: 28px; }
+  /* minmax(0,1fr): a plain 1fr column has min-width:auto, so the nowrap CTA button forced the
+     grid wider than the hero and clipped the form card on the right (seen 2026-10-03). */
+  .tia-seo .hero-grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .tia-seo .hero-copy, .tia-seo .form-card { min-width: 0; }
   .tia-seo .collage { display: none; }
-  .tia-seo .collage-mobile { display: grid; grid-template-columns: 1.25fr 0.75fr; gap: 12px; align-items: start; }
+  /* two landscape reporting shots at a shared aspect ratio so they sit level */
+  .tia-seo .collage-mobile { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: start; }
   .tia-seo .collage-mobile .collage-item { position: static; transform: none; width: 100%; box-shadow: 0 10px 16px -8px rgba(0,0,0,0.2); }
+  .tia-seo .collage-mobile .collage-item img { aspect-ratio: 16 / 10 !important; object-fit: cover; object-position: left top; }
   .tia-seo .hero-copy h1 { font-size: 30px; }
   .tia-seo .hero-sub { font-size: 16px; }
-  .tia-seo .hero-ctas .btn { flex: 1; min-width: 150px; }
+  .tia-seo .btn { white-space: normal; }
+  .tia-seo .nav .btn { white-space: nowrap; padding: 10px 16px; font-size: 14px; min-height: 40px; }
+  .tia-seo .hero-ctas { flex-direction: column; align-items: stretch; }
+  .tia-seo .hero-ctas .btn { width: 100%; }
   .tia-seo .h-xl { font-size: 34px; }
   .tia-seo .h-lg { font-size: 28px; }
   .tia-seo .h-md { font-size: 24px; }
@@ -1085,8 +1093,9 @@ export default function TIASEOLandingPage() {
             <div className="team-copy">
               <h3>A dedicated Client Success Manager who knows your account.</h3>
               <p>
-                Every engagement is run by a named Client Success Manager backed by our in-house technical, content, and
-                local SEO specialists. Same team, start to finish, so you never re-explain your business to somebody new.
+                Every engagement is run by a named Client Success Manager and a senior SEO consultant who owns the strategy,
+                backed by our in-house technical, content, and local SEO specialists. Same team, start to finish, so you
+                never re-explain your business to somebody new.
               </p>
               <p>
                 They report on progress quarterly, flag algorithm shifts as they happen, and tell you what changed and
@@ -1131,7 +1140,7 @@ export default function TIASEOLandingPage() {
       <section className="lp-section" id="pricing">
         <div className="lp-container">
           <h2 className="h-lg center">
-            What each SEO retainer <span className="hl">includes</span>.
+            SEO services: what each retainer <span className="hl">includes</span>.
           </h2>
           <div className="pricing-grid">
             {tiers.map((t) => (
